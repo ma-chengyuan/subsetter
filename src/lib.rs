@@ -39,6 +39,7 @@ resulting font is 36 KB (5 KB zipped).
 #![deny(missing_docs)]
 
 mod cff;
+mod cmap;
 mod glyf;
 mod head;
 mod hmtx;
@@ -61,6 +62,8 @@ use crate::stream::{Reader, Structure, Writer};
 ///   layout tables.
 pub struct Profile<'a> {
     glyphs: &'a [u16],
+    /// Whether or not to map each glyph to a codepoint in Unicode PUAs.
+    map_glyphs: bool,
 }
 
 impl<'a> Profile<'a> {
@@ -81,7 +84,12 @@ impl<'a> Profile<'a> {
     /// - For CFF outlines: You can extract the CFF table and embed just the
     ///   table as a `FontFile3` with Subtype `Type1C`
     pub fn pdf(glyphs: &'a [u16]) -> Self {
-        Self { glyphs }
+        Self { glyphs, map_glyphs: false }
+    }
+
+    /// Reduces the font to the subset needed for web embedding.
+    pub fn web(glyphs: &'a [u16]) -> Self {
+        Self { glyphs, map_glyphs: true }
     }
 }
 
@@ -291,6 +299,7 @@ impl<'a> Context<'a> {
             Tag::HEAD => head::subset(self)?,
             Tag::HMTX => hmtx::subset(self)?,
             Tag::POST => post::subset(self)?,
+            Tag::CMAP => cmap::map_glyphs(self)?,
             _ => self.push(tag, data),
         }
 
