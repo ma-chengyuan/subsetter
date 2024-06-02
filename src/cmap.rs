@@ -260,7 +260,10 @@ fn map_glyph_to_pua_12(st: &mut Subtable<'_>, num_glyphs: u16) -> Result<()> {
         w.write(start_glyph_id);
     }
     w.align(4);
-    st.data = Cow::Owned(w.finish());
+    let mut data = w.finish();
+    let length = data.len() as u32;
+    data[4..8].copy_from_slice(&length.to_be_bytes());
+    st.data = Cow::Owned(data);
     Ok(())
 }
 
