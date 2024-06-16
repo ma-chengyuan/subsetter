@@ -1,7 +1,10 @@
 [package]
 name = "subsetter"
 version = "0.1.1"
-authors = ["Laurenz <laurmaedje@gmail.com>"]
+authors = [
+    "Laurenz <laurmaedje@gmail.com>",
+    "Chengyuan Ma <chengyuanma@protonmail.com>",
+]
 edition = "2021"
 description = "Reduces the size and coverage of OpenType fonts."
 repository = "https://github.com/typst/subsetter"
@@ -13,3 +16,17 @@ exclude = ["fonts/*"]
 
 [dependencies]
 ttf-parser = "0.21"
+clap = { version = "4", features = ["derive"], optional = true }
+woff-convert = { git = "https://github.com/ma-chengyuan/woff-convert.git", rev = "274d7d3", optional = true }
+
+[lib]
+name = "subsetter"
+path = "src/lib.rs"
+
+[[bin]]
+name = "subsetter-cli"
+path = "src/main.rs"
+required-features = ["cli"]
+
+[features]
+cli = ["clap", "woff-convert"]

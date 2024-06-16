@@ -88,6 +88,9 @@ impl<'a> Profile<'a> {
     }
 
     /// Reduces the font to the subset needed for web embedding.
+    ///
+    /// Also map each glyph to a codepoint in the Unicode PUA, so they can be
+    /// referenced in HTML.
     pub fn web(glyphs: &'a [u16]) -> Self {
         Self { glyphs, map_glyphs: true }
     }

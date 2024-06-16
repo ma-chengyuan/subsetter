@@ -274,18 +274,6 @@ pub(crate) fn map_glyphs(ctx: &mut Context) -> Result<()> {
         return Ok(());
     }
     let mut table = Table::read(&mut Reader::new(data))?;
-    // println!("cmap table: {}", table.subtables.len());
-    // for rec in &table.encoding_records {
-    //     let tab = &table.subtables[rec.subtable_idx];
-    //     println!(
-    //         "platform: {}, encoding: {}, format: {}, language: {}, length: {}",
-    //         rec.platform_id,
-    //         rec.encoding_id,
-    //         tab.format,
-    //         tab.language,
-    //         tab.data.len()
-    //     );
-    // }
     let tab_12_id = match table.subtables.iter().position(|st| st.format == 12) {
         Some(id) => id,
         None => {

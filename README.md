@@ -1,4 +1,5 @@
 # subsetter
+
 [![Crates.io](https://img.shields.io/crates/v/subsetter.svg)](https://crates.io/crates/subsetter)
 [![Documentation](https://docs.rs/subsetter/badge.svg)](https://docs.rs/subsetter)
 
@@ -9,7 +10,21 @@ Reduces the size and coverage of OpenType fonts with TrueType or CFF outlines.
 subsetter = "0.1"
 ```
 
+## This fork
+
+This fork extends this crate with a few features which make it more suitable for
+web fonts:
+
+- Map glyph with id `x` to Unicode PUA code point `0xF0000 + x`. This allows
+  arbitrary glyphs to be referenced directly in HTML.
+- Read from and write to WOFF2 files.
+- A CLI. To build, run
+  ```bash
+  cargo build --release --features=cli --bin subsetter-cli
+  ```
+
 ## Example
+
 In the example below, we remove all glyphs except the ones with IDs 68, 69, 70.
 Those correspond to the letters 'a', 'b' and 'c'.
 
@@ -40,6 +55,7 @@ In the above example, the original font was 375 KB (188 KB zipped) while the
 resulting font is 36 KB (5 KB zipped).
 
 ## Limitations
+
 Currently, the library only subsets static outline fonts. Furthermore, it is
 designed for use cases where text was already mapped to glyphs. Possible future
 work includes:
@@ -51,7 +67,9 @@ work includes:
   layout tables.
 
 ## Safety and Dependencies
+
 This crate forbids unsafe code and has zero dependencies.
 
 ## License
+
 This crate is dual-licensed under the MIT and Apache 2.0 licenses.
